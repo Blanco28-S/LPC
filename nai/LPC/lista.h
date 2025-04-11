@@ -33,6 +33,10 @@ class Lista{
         void mostrar();                                                                 //imprime la lista insertada
         bool sublista(Lista<Elemento> &lista);                                          //debe verificar si una lista es sublista de la lista instanciada
                                                                                         //A es sublista de B, si todos los elementos de A estan en B de forma contigua y si A es vacia entonces es sublista de B
+        void aggFinal(Elemento dato);                                                   //agrega al final (porsia se necesita aunque creo que ni hace falta :=)
+        void hacerCircular();                                                           //hace que la lista instanciada se haga circular
+
+
         /*MergeSort*/
         void ordenar();
         Nodo<Elemento>* mergeSort(Nodo<Elemento> *cabeza);
@@ -50,8 +54,8 @@ class Lista{
 template <typename Elemento>
 Lista<Elemento>::Lista(){      
     this->tam = 0;
-    this->primero = nullptr;
-    this->ultimo = nullptr;
+    this->primero = NULL;
+    this->ultimo = NULL;
 }
 
 /*realiza la copia de una lista, llamando al procedimiento copia()*/
@@ -76,7 +80,7 @@ void Lista<Elemento>::copiar(const Lista<Elemento> &lista){
     
         nActual = nActual->obtSiguiente();                                      // Avanzar al siguiente nodo de la lista original
     
-        while (nActual != nullptr) {
+        while (nActual != NULL) {
             nNuevo = new Nodo<Elemento>(nActual->obtInfo());                    // Crear un nuevo nodo
             nAux->modSiguiente(nNuevo);                                         // Enlazar el nuevo nodo al final de la nueva lista
             nAux = nNuevo;                                                      // Mover nAux al nuevo nodo
@@ -99,8 +103,8 @@ template<typename Elemento>
 void Lista<Elemento>::limpiar(){
     destruir();
     this->tam = 0;
-    this->primero = nullptr;
-    this->ultimo = nullptr;
+    this->primero = NULL;
+    this->ultimo = NULL;
 }
 
 
@@ -111,7 +115,7 @@ Elemento Lista<Elemento>::consultar(int pos){
     
 
     if(pos < 1 || pos > this->tam){
-        return (-1); //retorna un objeto por defecto m o  i f i c a r 
+        return Elemento();                                                            //retorna un objeto por defecto m o  i f i c a r 
     }
 
 
@@ -141,7 +145,7 @@ int Lista<Elemento>::buscar(Elemento dato){
     int  contador = 1;
     Nodo<Elemento> *nActual = this->primero;
 
-    while(nActual != nullptr){
+    while(nActual != NULL){
         if(nActual->obtInfo() == dato){
             return (contador);
         }
@@ -176,7 +180,7 @@ bool Lista<Elemento>::estaElemento(Elemento dato){
     bool esActivo = false;
 
 
-    while(nActual != nullptr && !esActivo){
+    while(nActual != NULL && !esActivo){
         if(nActual->obtInfo() == dato){
             esActivo = true;
         }
@@ -200,7 +204,7 @@ void Lista<Elemento>::modificar(int pos, Elemento dato){
     bool esActivo = false;
     Nodo<Elemento> *nActual = this->primero;
 
-    while( nActual != nullptr && !esActivo){
+    while( nActual != NULL && !esActivo){
         if( i == pos ){
             nActual->modInfo(dato);
             esActivo = true;
@@ -216,11 +220,11 @@ void Lista<Elemento>::modificar(int pos, Elemento dato){
 template <typename Elemento>
 void Lista<Elemento>::insertar(int pos, Elemento dato){
     Nodo<Elemento> *nNodo = new Nodo<Elemento>;                     //creacion del nodo que reservara el nuevo dato
-    Nodo<Elemento> *nAnterior=nullptr;
+    Nodo<Elemento> *nAnterior=NULL;
    
 
     nNodo->modInfo(dato);
-    nNodo->modSiguiente(nullptr);
+    nNodo->modSiguiente(NULL);
 
     if(pos == 1){       //inserta en la primera posicion
         
@@ -231,7 +235,7 @@ void Lista<Elemento>::insertar(int pos, Elemento dato){
         }
         
     }else if(pos == this->tam + 1){
-        if(this->ultimo != nullptr){
+        if(this->ultimo != NULL){
             this->ultimo->modSiguiente(nNodo);
         }
         this->ultimo = nNodo;
@@ -260,16 +264,16 @@ Lista<Elemento>::~Lista(){
 template <typename Elemento>
 void Lista<Elemento>::destruir(){
     Nodo<Elemento> *nActual = this->primero;
-    Nodo<Elemento> *nSiguiente = nullptr;
+    Nodo<Elemento> *nSiguiente = NULL;
 
-    while(nActual != nullptr){
+    while(nActual != NULL){
         nSiguiente = nActual->obtSiguiente();
         delete nActual;
         nActual = nSiguiente;
         this->tam--;
     }
-    this->primero = nullptr;                            // Asegúrate de que el puntero primero sea nullptr
-    this->ultimo = nullptr;                             // Asegúrate de que el puntero ultimo sea nullptr
+    this->primero = NULL;                            // Asegúrate de que el puntero primero sea NULL
+    this->ultimo = NULL;                             // Asegúrate de que el puntero ultimo sea NULL
     this->tam = 0;                                      // Reinicia el tamaño de la lista
 
 }
@@ -282,12 +286,12 @@ void Lista<Elemento>::eliminar(int pos){
 
     if(pos == 1){
         this->primero = nActual->obtSiguiente();
-        nActual->modSiguiente(nullptr);
+        nActual->modSiguiente(NULL);
         if(this->tam == 1){
-            this->ultimo = nullptr;
+            this->ultimo = NULL;
         }
     }else{
-        Nodo<Elemento> *nAnterior = nullptr; 
+        Nodo<Elemento> *nAnterior = NULL; 
         
         for(int i=1; i<pos; i++){
             nAnterior = nActual;
@@ -297,12 +301,12 @@ void Lista<Elemento>::eliminar(int pos){
         if(pos == this->tam){
         
             this->ultimo = nAnterior;
-            nAnterior->modSiguiente(nullptr);
+            nAnterior->modSiguiente(NULL);
 
         }else{
                
             nAnterior->modSiguiente(nActual->obtSiguiente());
-            nActual->modSiguiente(nullptr);
+            nActual->modSiguiente(NULL);
 
         }
     
@@ -317,12 +321,12 @@ void Lista<Elemento>::eliminar(int pos){
 template <typename Elemento>
 void Lista<Elemento>::invertir(){
     Nodo<Elemento> *nActual = this->primero;
-    Nodo<Elemento> *nSiguiente = nullptr;       //apuntadores a: anterior, actual y siguiente
-    Nodo<Elemento> *nAnterior = nullptr;
+    Nodo<Elemento> *nSiguiente = NULL;       //apuntadores a: anterior, actual y siguiente
+    Nodo<Elemento> *nAnterior = NULL;
 
     
 
-    while( nActual != nullptr){
+    while( nActual != NULL){
         nSiguiente = nActual->obtSiguiente();    
         nActual->modSiguiente(nAnterior);
         nAnterior = nActual;
@@ -336,7 +340,7 @@ void Lista<Elemento>::invertir(){
 }
 
 
-
+/*optimizar*/
 /*une dos listas, sin importar que la lista instanciada sea vacia*/
 template <typename Elemento> 
 void Lista<Elemento>::concatenar(Lista<Elemento> &lista){
@@ -370,7 +374,7 @@ bool Lista<Elemento>::igualar(Lista<Elemento> &lista1, Lista<Elemento>  &lista2)
     Nodo<Elemento> *nAux1 = lista1.primero;
     Nodo<Elemento> *nAux2 = lista2.primero;
 
-    while( nAux1 != nullptr && nAux2 != nullptr ){
+    while( nAux1 != NULL && nAux2 != NULL ){
         if(nAux1->obtInfo() != nAux2->obtInfo()){
             return false;
         }else{
@@ -388,12 +392,12 @@ bool Lista<Elemento>::igualar(Lista<Elemento> &lista1, Lista<Elemento>  &lista2)
 template <typename Elemento> 
 void Lista<Elemento>::mostrar(){
 
-    if(this->esVacia()){                                                                        //p i l a
+    if(this->esVacia()){                                                                        //p i l a aqui
         cout<<"La Lista esta vacia. "<<endl;
         
     }else{
         Nodo<Elemento> *nNodo = this->primero;
-        while(nNodo != nullptr){
+        while(nNodo != NULL){
             cout<<nNodo->obtInfo()<<" -> ";
             nNodo = nNodo->obtSiguiente();
         }
@@ -402,6 +406,7 @@ void Lista<Elemento>::mostrar(){
 }
 
 
+/*verifica si es sublista*/
 template <typename Elemento>
 bool Lista<Elemento>::sublista(Lista<Elemento> &lista) {
     if (lista.tam == 0) {
@@ -415,7 +420,7 @@ bool Lista<Elemento>::sublista(Lista<Elemento> &lista) {
     Nodo<Elemento> *nActual = this->primero; 
     Nodo<Elemento> *nSublista = lista.primero; 
 
-    while (nActual != nullptr) {
+    while (nActual != NULL) {
         // Comienza a comparar solo si el primer elemento de la sublista coincide
         if (nActual->obtInfo() == nSublista->obtInfo()) {
             Nodo<Elemento> *tempActual = nActual;                                                  // Nodo temporal para recorrer la lista actual
@@ -423,8 +428,8 @@ bool Lista<Elemento>::sublista(Lista<Elemento> &lista) {
             bool esSublista = true;                                                                // Bandera para verificar si es sublista
 
             // Compara los nodos de la sublista con los nodos de la lista actual
-            while (tempSub != nullptr) {
-                if (tempActual == nullptr || tempActual->obtInfo() != tempSub->obtInfo()) {
+            while (tempSub != NULL) {
+                if (tempActual == NULL || tempActual->obtInfo() != tempSub->obtInfo()) {
                     esSublista = false;                                                            // No coincide, no es sublista
                     break;
                 }
@@ -442,11 +447,38 @@ bool Lista<Elemento>::sublista(Lista<Elemento> &lista) {
     return false;                                                                                  // No se encontró la sublista
 }
 
+
+template <typename Elemento>
+void Lista<Elemento>::aggFinal(Elemento dato){
+    Nodo<Elemento> *nNuevo = new Nodo<Elemento>(dato);                  // se crea un nueco nodo con y se le inserta el dato
+    
+    if (this->esVacia()) {
+        
+        this->primero = nNuevo;
+        this->ultimo = nNuevo;
+    } else {
+        
+        this->ultimo->modSiguiente(nNuevo);
+        this->ultimo = nNuevo;
+    }
+    
+    this->tam++;
+
+}
+      
+template <typename Elemento>
+void Lista<Elemento>::hacerCircular() {
+    if (this->primero != NULL) {                                       // Si la lista no está vacía
+        this->ultimo->modSiguiente(this->primero);                        // El último nodo apunta al primero
+    }
+}
+
+
 /*-----------------------metodo de ordenamiento mergeSort*/
 
 template <typename Elemento>
 void Lista<Elemento>::ordenar() {
-    if (this->primero == nullptr || this->primero->obtSiguiente() == nullptr) {
+    if (this->primero == NULL || this->primero->obtSiguiente() == NULL) {
         return;                                                                                 // La lista está vacía o tiene un solo elemento
     }
 
@@ -457,7 +489,7 @@ void Lista<Elemento>::ordenar() {
 
 template <typename Elemento>
 Nodo<Elemento>* Lista<Elemento>::mergeSort(Nodo<Elemento> *cabeza){
-    if (cabeza == nullptr || cabeza->obtSiguiente() == nullptr) {
+    if (cabeza == NULL || cabeza->obtSiguiente() == NULL) {
         return cabeza;                                                                          // Caso base: lista vacía o un solo nodo
     }
 
@@ -476,25 +508,25 @@ Nodo<Elemento>* Lista<Elemento>::dividir(Nodo<Elemento> *cabeza){
     Nodo<Elemento> *rapido = cabeza->obtSiguiente();
 
     // Avanza 'rapido' dos nodos y 'lento' un nodo
-    while (rapido != nullptr) {
+    while (rapido != NULL) {
         rapido = rapido->obtSiguiente();
-        if (rapido != nullptr) {
+        if (rapido != NULL) {
             lento = lento->obtSiguiente();
             rapido = rapido->obtSiguiente();
         }
     }
 
     Nodo<Elemento> *mitad = lento->obtSiguiente();
-    lento->modSiguiente(nullptr);                                                               // Termina la primera mitad
+    lento->modSiguiente(NULL);                                                               // Termina la primera mitad
     return mitad;                                                                               // Retorna la segunda mitad
 }
 
 template <typename Elemento>
 Nodo<Elemento>* Lista<Elemento>::mezclar(Nodo<Elemento> *izquierda, Nodo<Elemento> *derecha){
-    if (izquierda == nullptr) return derecha;
-    if (derecha == nullptr) return izquierda;
+    if (izquierda == NULL) return derecha;
+    if (derecha == NULL) return izquierda;
 
-    Nodo<Elemento> *resultado = nullptr;
+    Nodo<Elemento> *resultado = NULL;
 
     // Ordena los nodos
     if (izquierda->obtInfo() <= derecha->obtInfo()) {
@@ -513,7 +545,7 @@ void Lista<Elemento>::actualizarUltimoYTamano() {
     Nodo<Elemento>* actual = this->primero;
     this->tam = 0;                                                                               // Reinicia el tamaño
 
-    while (actual != nullptr) {
+    while (actual != NULL) {
         this->tam++;
         this->ultimo = actual;                                                                  // Actualiza el último nodo
         actual = actual->obtSiguiente();

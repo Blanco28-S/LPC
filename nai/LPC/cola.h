@@ -212,7 +212,7 @@ void Cola<Elemento>::limpiar(){
 
 
 /* Método para invertir la cola sii esta llena*/
-template <typename Elemento>
+/*template <typename Elemento>
 void Cola<Elemento>::invertir() {
 
     if(!esVacia()){
@@ -224,7 +224,7 @@ void Cola<Elemento>::invertir() {
     //cout<<"[WARNING] asegurate que la cola tenga Elementos para invertir"<<endl;
     
 }
-
+*/
 
 
 /*  Método para concatenar una cola a la cola instanciada  */ //mejorar

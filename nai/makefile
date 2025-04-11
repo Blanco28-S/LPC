@@ -1,28 +1,19 @@
-# Variables
-CXX = g++
-CXXFLAGS = -g
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = RUN
+CXX := g++
+CXXFLAGS := -std=c++98 
+TARGET := ./lpc.exe
 
-# Regla por defecto
-all: $(EXECUTABLE)
+SRC := ejercicio1/main.cpp
+OBJ := $(SRC:.cpp=.o)
 
-# Regla para crear el ejecutable
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(OBJECTS) -o $@
+all: $(TARGET)
 
-# Regla para compilar los archivos .cpp en .o
+$(TARGET): $(OBJ)
+	$(CXX) $^ -o $@
+
 %.o: %.cpp
 	$(CXX) -c $< -o $@
 
-# Comando para ejecutar el programa
-run: $(EXECUTABLE)
-	./$(EXECUTABLE)
-
-# Comando para limpiar los archivos generados
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f $(OBJ) $(TARGET)
 
-# Regla para evitar recompilaciones innecesarias
-.PHONY: all run clean
+.PHONY: all clean
